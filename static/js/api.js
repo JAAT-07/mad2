@@ -1,7 +1,3 @@
-/**
- * API client for Placement Portal.
- * Uses fetch with credentials for session cookie.
- */
 const API = {
   base: '',
 

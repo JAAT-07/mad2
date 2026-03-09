@@ -5,7 +5,6 @@ from config import Config
 
 
 def get_db_path():
-    """Return the database file path, creating instance folder if needed."""
     instance_path = os.path.dirname(Config.DATABASE_PATH)
     if not os.path.exists(instance_path):
         os.makedirs(instance_path)
@@ -16,18 +15,18 @@ def get_db_path():
 
 
 def get_connection():
-    """Get a database connection with row factory for dict-like access."""
+
+
     conn = sqlite3.connect(get_db_path())
     conn.row_factory = sqlite3.Row
     return conn
 
 
 def init_db():
-    """Create all database tables programmatically."""
     conn = get_connection()
     cursor = conn.cursor()
 
-    # Admin table - pre-existing superuser
+    # Admin table
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS admin (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -106,7 +105,7 @@ def init_db():
         )
     ''')
 
-    # Create default admin if not exists
+    
     cursor.execute('SELECT COUNT(*) FROM admin')
     if cursor.fetchone()[0] == 0:
         from werkzeug.security import generate_password_hash

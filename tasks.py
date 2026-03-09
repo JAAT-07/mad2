@@ -1,10 +1,4 @@
-"""Celery tasks for Placement Portal Application.
 
-Includes:
-- Daily reminders for upcoming placement drive deadlines
-- Monthly activity report mail for admin
-- Async CSV export of a student's application history
-"""
 
 import csv
 import os
@@ -70,9 +64,9 @@ def _send_email(to_email: str, subject: str, html_body: str) -> None:
 
 # @celery.task
 # def send_test_email(to_email: str = None) -> str:
-#     """Send a test email to verify SMTP is configured. Usage: celery -A tasks call tasks.send_test_email --kwargs='{\"to_email\":\"you@example.com\"}'"""
+#     
 #     target = to_email or Config.ADMIN_EMAIL
-#     body = "<p>This is a test email from Placement Portal. If you received this, SMTP is working correctly.</p>"
+#     body = "<p>This is a test email bahi .</p>"
 #     _send_email(target, "Placement Portal - Test Email", body)
 #     return f"Test email sent to {target}"
 
@@ -123,7 +117,6 @@ def send_daily_deadline_reminders() -> None:
 
 @celery.task
 def send_monthly_activity_report() -> None:
-    """Generate and email a simple monthly activity report to the admin."""
     today = date.today()
     first_of_this_month = date(today.year, today.month, 1)
     last_month_end = first_of_this_month - timedelta(days=1)
@@ -172,7 +165,6 @@ def send_monthly_activity_report() -> None:
 
 @celery.task
 def export_student_applications_csv(student_id: int) -> str:
-    """Export a student's application history to a CSV file."""
     applications: List[Dict] = query_all(
         """
         SELECT

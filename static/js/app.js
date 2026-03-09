@@ -1,14 +1,13 @@
 const { createApp } = Vue;
 const { createRouter, createWebHashHistory } = VueRouter;
 
-// ---------- Helpers ----------
 function statusClass(s) {
   if (s === 'Approved' || s === 'Selected') return 'success';
   if (s === 'Pending' || s === 'Applied' || s === 'Shortlisted') return s === 'Shortlisted' ? 'info' : 'warning';
   return 'danger';
 }
 
-// ---------- Components ----------
+
 const LoginPage = {
   async mounted() {
     try {
@@ -608,7 +607,7 @@ const StudentHistory = {
   async mounted() { this.placements = await API.studentHistory(); }
 };
 
-// ---------- Router ----------
+// routers
 const routes = [
   { path: '/', redirect: '/login' },
   { path: '/login', component: LoginPage },
@@ -635,7 +634,7 @@ const routes = [
 
 const router = createRouter({ history: createWebHashHistory(), routes });
 
-// ---------- App ----------
+// appppp
 const App = {
   template: `
     <div>

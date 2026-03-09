@@ -1,7 +1,4 @@
-"""Placement Portal - Flask API + VueJS UI.
 
-Flask serves JSON APIs. VueJS (CDN) handles all UI. Single Jinja template for SPA entry.
-"""
 import os
 import json
 from datetime import datetime
@@ -24,7 +21,6 @@ with app.app_context():
 
 
 def to_json_serializable(obj):
-    """Convert db dict values for JSON (e.g. datetime, date)."""
     if obj is None:
         return None
     if isinstance(obj, (list, tuple)):
@@ -36,7 +32,7 @@ def to_json_serializable(obj):
     return obj
 
 
-# Optional Redis client for caching
+
 redis_client = None
 try:
     redis_client = redis.Redis.from_url(app.config["REDIS_URL"], decode_responses=True)
@@ -95,20 +91,20 @@ def allowed_file(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in {"pdf", "doc", "docx"}
 
 
-# ============= Favicon (avoid 404 in logs) =============
+#favicon
 @app.route("/favicon.ico")
 def favicon():
     return "", 204
 
 
-# ============= SPA ENTRY (Jinja only for this - per requirements) =============
+
 @app.route("/")
 def index():
     """Serve Vue SPA entry. Jinja used only for this entry point."""
     return render_template("index.html")
 
 
-# ============= AUTH API =============
+# auth api
 @app.route("/api/auth/me")
 def api_auth_me():
     """Current user info."""
@@ -225,7 +221,7 @@ def api_register_student():
     return jsonify({"success": True, "message": "Registration successful! You can now log in."})
 
 
-# ============= ADMIN API =============
+# admin api
 @app.route("/api/admin/dashboard")
 @admin_required
 def api_admin_dashboard():
@@ -380,7 +376,7 @@ def api_admin_applications():
     return jsonify(to_json_serializable(applications))
 
 
-# ============= COMPANY API =============
+# copany api
 @app.route("/api/company/dashboard")
 @company_required
 def api_company_dashboard():
@@ -560,7 +556,7 @@ def api_company_update_application_status(app_id):
     return jsonify({"success": True})
 
 
-# ============= STUDENT API =============
+# student api
 @app.route("/api/student/dashboard")
 @student_required
 def api_student_dashboard():
@@ -710,7 +706,7 @@ def api_student_export_applications():
             "filename": None,
         })
     except Exception:
-        # Fallback when Redis/Celery not running: export synchronously
+       
         filename = export_student_applications_csv(session["user_id"])
         return jsonify({
             "success": True,
@@ -742,7 +738,6 @@ def api_student_history():
     return jsonify(to_json_serializable(placements))
 
 
-# SPA catch-all: serve index.html for Vue routes (/login, /dashboard, etc.)
 @app.route("/<path:path>")
 def serve_spa(path):
     if path.startswith("api/") or path.startswith("static/"):
